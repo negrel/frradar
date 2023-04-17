@@ -1,7 +1,7 @@
 {
   "name": "frradar",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
+    "@maplibre/maplibre-react-native": "^9.0.1",
     "expo": "~48.0.11",
     "expo-status-bar": "~1.4.4",
+    "maplibre-gl": "^2.4.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.6",
