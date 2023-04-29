@@ -3,6 +3,7 @@ import MapLibreGL from '@maplibre/maplibre-react-native'
 import Constants from 'expo-constants'
 
 import {
+  propTypes,
   useSpeedCameras,
   defaultZoom,
   defaultLng,
@@ -22,18 +23,23 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function Map () {
+Map.propTypes = propTypes
+export default function Map ({ onDragStart, center }) {
   const speedCamerasData = useSpeedCameras(console.error)
+
+  console.log(center)
 
   const speedCameraLayers = []
   for (const [key, layer] of Object.entries(speedCamerasData || {})) {
     speedCameraLayers.push(
-      <MapLibreGL.ShapeSource id={key} shape={layer}>
+      <MapLibreGL.ShapeSource key={key} id={key} shape={layer}>
         <MapLibreGL.SymbolLayer
+          key={key}
           id={key}
           style={{
             iconImage: icons[key],
-            iconSize: 0.75
+            iconSize: 0.75,
+            iconAnchor: 'bottom'
           }}
         />
       </MapLibreGL.ShapeSource>
@@ -49,10 +55,11 @@ export default function Map () {
         compassViewMargins={{ x: 16, y: Constants.statusBarHeight }}
         styleURL={mapTilerStyleURL}
       >
+        <MapLibreGL.UserLocation />
         <MapLibreGL.Camera
           minZoomLevel={2}
           zoomLevel={defaultZoom}
-          centerCoordinate={[defaultLng, defaultLat]} />
+          centerCoordinate={center || [defaultLng, defaultLat]} />
         {speedCameraLayers}
       </MapLibreGL.MapView>
     </>

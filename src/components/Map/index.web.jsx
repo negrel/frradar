@@ -1,16 +1,16 @@
-
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-import { defaultLat, defaultLng, icons, mapTilerStyleURL, useSpeedCameras } from './lib'
+import { propTypes, defaultLat, defaultLng, icons, mapTilerStyleURL, useSpeedCameras } from './lib'
 
 const style = {
   flex: 1,
   alignSelf: 'stretch'
 }
 
-export default function Map () {
+Map.propTypes = propTypes
+function Map ({ onDragStart, center }) {
   const speedCamerasData = useSpeedCameras(console.error)
 
   const mapContainer = useRef(null)
@@ -31,6 +31,7 @@ export default function Map () {
       })
       map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
       map.current.addControl(new maplibregl.AttributionControl(), 'bottom-left')
+      map.current.on('dragstart', onDragStart)
     }
 
     if (!speedCamerasData) return
@@ -67,9 +68,16 @@ export default function Map () {
         })
       }
     })
-  }, [lat, lng, zoom, speedCamerasData])
+  }, [lat, lng, zoom, speedCamerasData, onDragStart])
+
+  if (center) {
+    map.current.setCenter(center)
+    map.current.zoomTo(18)
+  }
 
   return (
     <div ref={mapContainer} className="map" style={style} />
   )
 }
+
+export default memo(Map)

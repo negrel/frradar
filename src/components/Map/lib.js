@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 import secrets from '../../../secrets.json'
 import iconFixes from '../../../assets/speed-cameras/fixes.png'
@@ -76,4 +77,13 @@ export function useSpeedCameras (errorHandler) {
   }, [errorHandler])
 
   return speedCamerasData
+}
+
+export const propTypes = {
+  onDragStart: PropTypes.func,
+  center: PropTypes.oneOf([
+    PropTypes.exact([
+      PropTypes.number,
+      PropTypes.number]),
+    PropTypes.null])
 }
